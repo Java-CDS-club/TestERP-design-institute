@@ -2,11 +2,14 @@ package ru.oskin_di.TestERPdesigninstitute.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.oskin_di.TestERPdesigninstitute.models.Employee;
 import ru.oskin_di.TestERPdesigninstitute.models.WorkTask;
 import ru.oskin_di.TestERPdesigninstitute.repositories.EmployeeRepository;
 import ru.oskin_di.TestERPdesigninstitute.services.EmployeeService;
 import ru.oskin_di.TestERPdesigninstitute.services.WorkTaskService;
+import ru.oskin_di.TestERPdesigninstitute.utils.assignment.BusyExecutor;
+import ru.oskin_di.TestERPdesigninstitute.utils.assignment.Executor;
 
 import java.util.List;
 
@@ -21,17 +24,29 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee findById(int idEmployee) {
         return employeeRepository.findById(idEmployee).get();
-    //todo проверка optional
+        //todo проверка optional
     }
 
     @Override
-    public List<WorkTask> getMyCreatedWorkTask(int idEmployee) {;
+    public List<WorkTask> getMyCreatedWorkTask(int idEmployee) {
         return workTaskService.findWorkTasksByIdEmployeeCreator(idEmployee);
     }
 
     @Override
-    public List<WorkTask> getMyExecutedWorkTask(int idEmployee) {;
+    public List<WorkTask> getMyExecutedWorkTask(int idEmployee) {
         return workTaskService.findWorkTasksByIdEmployeeExecutor(idEmployee);
+    }
+
+    @Override
+    @Transactional
+    public void distributeTask(int idWorkTask) {
+        WorkTask workTask = workTaskService.findById(idWorkTask);
+        Executor executor = new BusyExecutor();
+        List<Employee> employees = findAll();
+        createLink(executor, employees);
+        executor.execute(workTask);
+        workTask.setInProgress(true);
+        workTaskService.updateTask(workTask);
     }
 
     @Override
@@ -40,14 +55,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void saveTask(int idEmployee, String nameWorkTask) {
+    public void saveTask(int idEmployee, String nameWorkTask, int employment_number) {
         Employee employee = findById(idEmployee);
-        workTaskService.saveTask(employee,nameWorkTask);
+        workTaskService.saveTask(employee, nameWorkTask, employment_number);
     }
 
     @Override
     public void updateTask(int idEmployee, int idWorkTask) {
         Employee employee = findById(idEmployee);
-        workTaskService.updateTask(employee,idWorkTask);
+        employee.setEmploymentRate(workTaskService.updateTask(employee, idWorkTask));
+        employeeRepository.save(employee);
+    }
+
+    private void createLink(Executor executor, List<Employee> employees) {
+        for (int i = employees.size() - 1; i > 0; i--) {
+            employees.get(i - 1).link(employees.get(i));
+        }
+        executor.link(employees.get(0));
+        employees.get(employees.size() - 1).link(executor);
     }
 }

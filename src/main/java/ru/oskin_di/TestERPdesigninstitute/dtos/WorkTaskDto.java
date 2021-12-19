@@ -1,10 +1,7 @@
 package ru.oskin_di.TestERPdesigninstitute.dtos;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.oskin_di.TestERPdesigninstitute.models.Employee;
-import ru.oskin_di.TestERPdesigninstitute.models.WorkTask;
 
 @Data
 @NoArgsConstructor
