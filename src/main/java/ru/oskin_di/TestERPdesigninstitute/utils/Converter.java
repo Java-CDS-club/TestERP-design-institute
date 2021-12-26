@@ -1,6 +1,7 @@
 package ru.oskin_di.TestERPdesigninstitute.utils;
 
 import ru.oskin_di.TestERPdesigninstitute.dtos.EmployeeDto;
+import ru.oskin_di.TestERPdesigninstitute.dtos.StatisticDto;
 import ru.oskin_di.TestERPdesigninstitute.dtos.WorkTaskDto;
 import ru.oskin_di.TestERPdesigninstitute.models.Employee;
 import ru.oskin_di.TestERPdesigninstitute.models.WorkTask;
@@ -26,6 +27,14 @@ public class Converter {
         } else {
             return converter;
         }
+    }
+
+    public StatisticDto statisticToDto(int countInProgress, int countNotInProgress, int countAll) {
+        return StatisticDto.builder()
+                .countInProgress(countInProgress)
+                .countNotInProgress(countNotInProgress)
+                .countAll(countAll)
+                .build();
     }
 
 

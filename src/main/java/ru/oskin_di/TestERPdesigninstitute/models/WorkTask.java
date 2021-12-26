@@ -46,5 +46,8 @@ public class WorkTask {
     @JoinColumn(name = "id_executor")
     private Employee employeeExecutor;
 
+    @Column(name = "employment_number")
+    private int employmentNumber;
+
 
 }

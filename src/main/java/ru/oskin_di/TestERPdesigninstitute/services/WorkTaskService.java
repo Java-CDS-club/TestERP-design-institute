@@ -1,6 +1,5 @@
 package ru.oskin_di.TestERPdesigninstitute.services;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
 import ru.oskin_di.TestERPdesigninstitute.models.Employee;
 import ru.oskin_di.TestERPdesigninstitute.models.WorkTask;
@@ -14,9 +13,11 @@ public interface WorkTaskService {
 
     List<WorkTask> findAll();
 
-    void saveTask (Employee employeeCreator, String nameWorkTask);
+    void saveTask(Employee employeeCreator, String nameWorkTask, int employment_number);
 
-    void updateTask(Employee employeeExecutor, int idWorkTask);
+    int updateTask(Employee employeeExecutor, int idWorkTask);
+
+    void updateTask(WorkTask workTask);
 
     List<WorkTask> findAllInProgress();
 
@@ -25,5 +26,11 @@ public interface WorkTaskService {
     List<WorkTask> findWorkTasksByIdEmployeeCreator(int idEmployee);
 
     List<WorkTask> findWorkTasksByIdEmployeeExecutor(int idEmployee);
+
+    int getCountAllWorkTasksInProgress();
+
+    int getCountAllWorkTasksNotInProgress();
+
+    int getCountAllWorkTasks();
 
 }

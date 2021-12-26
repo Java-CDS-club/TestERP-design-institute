@@ -1,10 +1,12 @@
 package ru.oskin_di.TestERPdesigninstitute.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.oskin_di.TestERPdesigninstitute.dtos.StatisticDto;
 import ru.oskin_di.TestERPdesigninstitute.dtos.WorkTaskDto;
 import ru.oskin_di.TestERPdesigninstitute.services.WorkTaskService;
 import ru.oskin_di.TestERPdesigninstitute.utils.Converter;
@@ -38,5 +40,11 @@ public class WorkTaskController {
     @GetMapping("/not_in_progress")
     public List<WorkTaskDto> getWorkTasksInfoNotInProgress() {
         return workTaskService.findAllNotInProgress().stream().map(converter::workTaskToDto).collect(Collectors.toList());
+    }
+
+    @GetMapping("/stat")
+    @Transactional
+    public StatisticDto getStatistic() {
+        return converter.statisticToDto(workTaskService.getCountAllWorkTasksInProgress(), workTaskService.getCountAllWorkTasksNotInProgress(),workTaskService.getCountAllWorkTasks());
     }
 }

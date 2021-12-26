@@ -13,12 +13,14 @@ public interface EmployeeService {
 
     List<Employee> findAll();
 
-    void saveTask(int idEmployee, String nameWorkTask);
+    void saveTask(int idEmployee, String nameWorkTask, int employment_number);
 
     void updateTask(int idEmployee, int idWorkTask);
 
     List<WorkTask> getMyCreatedWorkTask(int idEmployee);
 
     List<WorkTask> getMyExecutedWorkTask(int idEmployee);
+
+    void distributeTask(int idWorkTask);
 
 }

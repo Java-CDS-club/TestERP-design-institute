@@ -31,8 +31,8 @@ public class EmployeeController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<String> addTask(@RequestParam String nameWorkTask, @PathVariable int id) {
-        employeeService.saveTask(id, nameWorkTask);
+    public ResponseEntity<String> addTask(@RequestParam String nameWorkTask, @PathVariable int id, @RequestParam int employment_number) {
+        employeeService.saveTask(id, nameWorkTask, employment_number);
         return new ResponseEntity<String>("Задача поставлена", HttpStatus.OK);
     }
 
@@ -50,6 +50,12 @@ public class EmployeeController {
     @GetMapping("/{id}/my_executed_task")
     public List<WorkTaskDto> getMyExecutedTask(@PathVariable int id){
         return employeeService.getMyExecutedWorkTask(id).stream().map(converter::workTaskToDto).collect(Collectors.toList());
+    }
+
+    @PutMapping("/distribute_task")
+    public ResponseEntity<String> distributeTask(@RequestParam int idWorkTask) {
+        employeeService.distributeTask(idWorkTask);
+        return new ResponseEntity<String>("Задача распределена", HttpStatus.OK);
     }
 
 }
