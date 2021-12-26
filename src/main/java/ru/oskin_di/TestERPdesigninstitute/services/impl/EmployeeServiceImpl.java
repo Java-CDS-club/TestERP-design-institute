@@ -23,8 +23,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee findById(int idEmployee) {
-        return employeeRepository.findById(idEmployee).get();
-        //todo проверка optional
+        return employeeRepository.findById(idEmployee);
     }
 
     @Override
@@ -45,7 +44,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> employees = findAll();
         createLink(executor, employees);
         executor.execute(workTask);
-        workTask.setInProgress(true);
+        Employee employee = findById(workTask.getIdExecutor());
+        System.out.println(employee.getEmploymentRate());
+        employeeRepository.update(employee.getId(), employee.getEmploymentRate());
         workTaskService.updateTask(workTask);
     }
 
@@ -57,14 +58,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void saveTask(int idEmployee, String nameWorkTask, int employment_number) {
         Employee employee = findById(idEmployee);
-        workTaskService.saveTask(employee, nameWorkTask, employment_number);
+        workTaskService.saveTask(employee.getId(), nameWorkTask, employment_number);
     }
 
     @Override
     public void updateTask(int idEmployee, int idWorkTask) {
         Employee employee = findById(idEmployee);
-        employee.setEmploymentRate(workTaskService.updateTask(employee, idWorkTask));
-        employeeRepository.save(employee);
+        employee.setEmploymentRate(workTaskService.updateTask(employee.getId(), idWorkTask));
+        employeeRepository.update(idEmployee, employee.getEmploymentRate());
     }
 
     private void createLink(Executor executor, List<Employee> employees) {

@@ -56,8 +56,8 @@ public class Converter {
                 .id(workTask.getId())
                 .name(workTask.getName())
                 .inProgress(workTask.isInProgress())
-                .employeeCreator(employeeToDto(workTask.getEmployeeCreator()))
-                .employeeExecutor(employeeToDto(workTask.getEmployeeExecutor()))
+                .idCreator(workTask.getIdCreator())
+                .idExecutor(workTask.getIdExecutor())
                 .build();
     }
 }
