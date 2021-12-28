@@ -13,9 +13,9 @@ public interface WorkTaskService {
 
     List<WorkTask> findAll();
 
-    void saveTask(Employee employeeCreator, String nameWorkTask, int employment_number);
+    void saveTask(int idEmployee, String nameWorkTask, int employment_number);
 
-    int updateTask(Employee employeeExecutor, int idWorkTask);
+    int updateTask(int idEmployee, int idWorkTask);
 
     void updateTask(WorkTask workTask);
 

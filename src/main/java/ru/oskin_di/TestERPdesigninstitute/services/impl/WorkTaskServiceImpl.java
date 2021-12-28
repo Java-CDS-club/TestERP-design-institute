@@ -2,8 +2,6 @@ package ru.oskin_di.TestERPdesigninstitute.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.oskin_di.TestERPdesigninstitute.models.Employee;
 import ru.oskin_di.TestERPdesigninstitute.models.WorkTask;
 import ru.oskin_di.TestERPdesigninstitute.repositories.JdbcRepository;
 import ru.oskin_di.TestERPdesigninstitute.repositories.WorkTaskRepository;
@@ -20,9 +18,8 @@ public class WorkTaskServiceImpl implements WorkTaskService {
 
     @Override
     public WorkTask findById(int idWorkTask) {
-        return workTaskRepository.findById(idWorkTask).get();
+        return workTaskRepository.findById(idWorkTask);
     }
-    //todo проверка optional
 
     @Override
     public List<WorkTask> findAll() {
@@ -30,24 +27,26 @@ public class WorkTaskServiceImpl implements WorkTaskService {
     }
 
     @Override
-    @Transactional
-    public void saveTask(Employee employeeCreator, String nameWorkTask, int employment_number) {
+    public void saveTask(int idEmployee, String nameWorkTask, int employment_number) {
         WorkTask workTask = new WorkTask();
         workTask.setName(nameWorkTask);
-        workTask.setEmployeeCreator(employeeCreator);
+        workTask.setIdCreator(idEmployee);
         workTask.setEmploymentNumber(employment_number);
         workTaskRepository.save(workTask);
     }
 
     @Override
-    @Transactional
-    public int updateTask(Employee employeeExecutor, int idWorkTask) {
-        WorkTask workTask = findById(idWorkTask);
-        workTask.setEmployeeExecutor(employeeExecutor);
-        workTask.setInProgress(true);
-        workTaskRepository.save(workTask);
-        return workTask.getEmploymentNumber();
+    public int updateTask(int idEmployee, int idWorkTask) {
+        workTaskRepository.update(idEmployee, idWorkTask);
+        return findById(idWorkTask).getEmploymentNumber();
     }
+
+    @Override
+    public void updateTask(WorkTask workTask) {
+        workTaskRepository.update(workTask);
+    }
+
+    ;
 
     @Override
     public List<WorkTask> findWorkTasksByIdEmployeeCreator(int idEmployee) {
@@ -84,8 +83,5 @@ public class WorkTaskServiceImpl implements WorkTaskService {
         return workTaskRepository.findAllByInProgress(false);
     }
 
-    @Override
-    public void updateTask(WorkTask workTask){
-        workTaskRepository.save(workTask);
-    };
+
 }

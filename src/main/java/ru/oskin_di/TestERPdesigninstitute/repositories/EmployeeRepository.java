@@ -1,12 +1,18 @@
 package ru.oskin_di.TestERPdesigninstitute.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.oskin_di.TestERPdesigninstitute.models.Employee;
 
+import java.util.List;
 
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+public interface EmployeeRepository {
+
+    List<Employee> findAll();
+
+    Employee findById(int id);
+
+    void update(int id, int employment_rate);
 
 }

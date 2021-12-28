@@ -13,9 +13,9 @@ public class WorkTaskDto {
 
     private boolean inProgress;
 
-    private EmployeeDto employeeCreator;
+    private int idCreator;
 
-    private EmployeeDto employeeExecutor;
+    private int idExecutor;
 
     public static Builder builder() {
         return new Builder();
@@ -43,13 +43,13 @@ public class WorkTaskDto {
             return this;
         }
 
-        public Builder employeeCreator(EmployeeDto employeeCreator) {
-            workTaskDto.employeeCreator = employeeCreator;
+        public Builder idCreator(int idCreator) {
+            workTaskDto.idCreator = idCreator;
             return this;
         }
 
-        public Builder employeeExecutor(EmployeeDto employeeExecutor) {
-            workTaskDto.employeeExecutor = employeeExecutor;
+        public Builder idExecutor(int idExecutor) {
+            workTaskDto.idExecutor = idExecutor;
             return this;
         }
 
